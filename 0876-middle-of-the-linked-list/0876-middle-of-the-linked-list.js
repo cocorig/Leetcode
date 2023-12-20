@@ -25,7 +25,7 @@ var middleNode = function(head) {
     console.log(node)
      for (let i = 0; i < mid - 1; i++) {
         node = node.next;
-        console.log(node)
+       
     }
     return node;
 };
