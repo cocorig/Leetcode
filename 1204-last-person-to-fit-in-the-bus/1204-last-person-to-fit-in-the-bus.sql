@@ -1,17 +1,10 @@
 # Write your MySQL query statement below
 SELECT person_name
-FROM Queue
-WHERE turn = (
-    SELECT MAX(turn)
-    FROM (
-        SELECT turn, SUM(weight) as total_weight
-        FROM Queue t
-        WHERE (
-            SELECT SUM(weight)
-            FROM Queue
-            WHERE turn <= t.turn
-        ) <= 1000
-        GROUP BY turn
-    ) AS subquery
-    WHERE total_weight <= 1000
-);
+FROM (
+    SELECT person_name, turn, weight, 
+           SUM(weight) OVER (ORDER BY turn) as total_weight
+    FROM Queue
+) AS cumulative
+WHERE total_weight <= 1000
+ORDER BY turn DESC
+LIMIT 1;
